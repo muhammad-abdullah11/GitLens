@@ -1,4 +1,4 @@
-import { FiStar, FiGitBranch, FiExternalLink } from 'react-icons/fi'
+import { FiStar, FiGitBranch, FiExternalLink, FiActivity } from 'react-icons/fi'
 import { VscCircleFilled } from 'react-icons/vsc'
 
 const langColors = {
@@ -24,7 +24,7 @@ const badgeStyles = {
   active: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
 }
 
-export default function RepoCard({ repo, badge }) {
+export default function RepoCard({ repo, badge, recentCommits }) {
   const s = badge ? badgeStyles[badge.type] : null
   return (
     <a
@@ -68,6 +68,11 @@ export default function RepoCard({ repo, badge }) {
           <FiGitBranch className="text-gray-300" />
           {repo.forks_count.toLocaleString()}
         </span>
+        {recentCommits > 0 && (
+          <span className="flex items-center gap-1 font-medium text-blue-500 ml-auto">
+             <FiActivity /> {recentCommits} recent commits
+          </span>
+        )}
       </div>
     </a>
   )

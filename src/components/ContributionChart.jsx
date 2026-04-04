@@ -7,20 +7,27 @@ export default function ContributionChart({ events }) {
     const recentEvents = eventsList.filter(e => new Date(e.created_at) >= cutoff)
 
     const today = new Date()
+    const startGrid = new Date(today)
+    startGrid.setDate(startGrid.getDate() - 364)
+    startGrid.setDate(startGrid.getDate() - startGrid.getDay())
+    const endGrid = new Date(today)
+    endGrid.setDate(endGrid.getDate() + (6 - endGrid.getDay()))
+
+    const weekCount = Math.round((endGrid - startGrid) / (7 * 24 * 60 * 60 * 1000))
     const weeks = []
-    
-    for (let i = 0; i < 5; i++) {
+
+    for (let i = 0; i < weekCount; i++) {
       const daysInWeek = []
       for (let j = 0; j < 7; j++) {
         const date = new Date(today)
-        const daysToSubtract = (4 - i) * 7 + (today.getDay() - j)
+        const daysToSubtract = (weekCount - 1 - i) * 7 + (today.getDay() - j)
         date.setDate(today.getDate() - daysToSubtract)
-        
+
         const dayEvents = recentEvents.filter(e => {
           const eDate = new Date(e.created_at)
-          return eDate.getDate() === date.getDate() && 
-                 eDate.getMonth() === date.getMonth() && 
-                 eDate.getFullYear() === date.getFullYear()
+          return eDate.getDate() === date.getDate() &&
+            eDate.getMonth() === date.getMonth() &&
+            eDate.getFullYear() === date.getFullYear()
         })
 
         daysInWeek.push({
@@ -31,10 +38,10 @@ export default function ContributionChart({ events }) {
       }
       weeks.push(daysInWeek)
     }
-    return {weeks, recentEvents: recentEvents.length}
+    return { weeks, recentEvents: recentEvents.length }
   }
 
-  const {weeks, recentEvents} = useMemo(() => getContributionGrid(events), [events])
+  const { weeks, recentEvents } = useMemo(() => getContributionGrid(events), [events])
 
   const getIntensityClass = (count, inRange) => {
     if (!inRange) return 'bg-gray-50'
@@ -46,30 +53,30 @@ export default function ContributionChart({ events }) {
   }
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  
+
   const startMonthIdx = weeks[0][0].date.getMonth()
   const endMonthIdx = new Date().getMonth()
-  
-  const displayMonths = []
-  if (startMonthIdx === endMonthIdx) {
-      displayMonths.push(months[startMonthIdx])
-  } else {
-      displayMonths.push(months[startMonthIdx], months[endMonthIdx])
-  }
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-gray-900">
-           {recentEvents} contributions in the last 30 days
+          {recentEvents} contributions in the last 30 days
         </h2>
       </div>
 
       <div className="rounded-xl border border-gray-100 p-4">
-        <div className="flex text-xs mb-2 text-gray-500 pl-8 ml-2">
-            {displayMonths.map((m, i) => (
-                <span key={i} className="mr-16">{m}</span>
-            ))}
+        <div className="flex gap-1 ml-1 text-xs mb-2 text-gray-500 pl-9">
+          {weeks.map((week, index) => {
+            const m = months[week[0].date.getMonth()]
+            const prevM = index > 0 ? months[weeks[index - 1][0].date.getMonth()] : null
+            const showMonth = m !== prevM
+            return (
+              <div key={index} className="w-3 shrink-0">
+                {showMonth && <span className="whitespace-nowrap relative -left-1">{m}</span>}
+              </div>
+            )
+          })}
         </div>
 
         <div className="flex gap-1 ml-1">
