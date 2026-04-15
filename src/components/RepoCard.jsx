@@ -30,7 +30,7 @@ export default function RepoCard({ repo, badge, recentCommits }) {
     <a
       href={repo.html_url}
       target="_blank"
-      className="group relative flex flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:border-blue-200 hover:shadow-md"
+      className="group relative flex flex-col gap-3 rounded-2xl border border-gray-300 bg-white p-5 shadow-sm transition-all hover:border-blue-200 hover:shadow-md"
     >
       {badge && (
         <span
@@ -61,7 +61,7 @@ export default function RepoCard({ repo, badge, recentCommits }) {
           </span>
         )}
         <span className="flex items-center gap-1">
-          <FiStar className="text-yellow-400" />
+          <FiStar className="text-gray-400" />
           {repo.stargazers_count.toLocaleString()}
         </span>
         <span className="flex items-center gap-1">
@@ -70,7 +70,7 @@ export default function RepoCard({ repo, badge, recentCommits }) {
         </span>
         {recentCommits > 0 && (
           <span className="flex items-center gap-1 font-medium text-blue-500 ml-auto">
-             <FiActivity /> {recentCommits} recent commits
+            <FiActivity /> {recentCommits} recent commits
           </span>
         )}
       </div>

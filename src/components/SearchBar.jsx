@@ -26,7 +26,7 @@ export default function SearchBar({ defaultValue = '' }) {
       </div>
       <button
         type="submit"
-        className="flex shrink-0 items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-500 active:scale-95"
+        className="flex shrink-0 items-center gap-2 rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-800 active:scale-95"
       >
         Search
       </button>
